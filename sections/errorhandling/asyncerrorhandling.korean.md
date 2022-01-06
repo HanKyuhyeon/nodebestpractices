@@ -1,10 +1,12 @@
-# Use Async-Await or promises for async error handling
+2.1
 
-### One Paragraph Explainer
+# 비동기 에러 처리시에는 async-await 혹은 promise를 사용하라
 
-Callbacks don’t scale well since most programmers are not familiar with them. They force to check errors all over, deal with nasty code nesting and make it difficult to reason about the code flow. Promise libraries like BlueBird, async, and Q pack a standard code style using RETURN and THROW to control the program flow. Specifically, they support the favorite try-catch error handling style which allows freeing the main code path from dealing with errors in every function
+### 한문단 설명
 
-### Code Example – using promises to catch errors
+콜백은 대부분의 개발자에게 익숙하지 않기 때문에 잘 쓰이지 않는다. 콜백은 오류를 전체적으로 확인하고 불쾌한 코드 중첩을 처리하게 하여 코드 흐름에 대해 추론하기 어렵게 만든다. BlueBird, async, Q와 같은 Promise 라이브러리는 RETURN 및 THROW를 사용하여 프로그램 흐름을 제어하는 표준 코드 스타일을 사용할 수 있게 해준다. 특히, try-catch 스타일을 지원하여 기본 코드 경로가 모든 기능의 오류를 매번 처리하지 않도록 한다.
+
+### 코드 예시 – promise를 사용한 에러 잡기
 
 ```javascript
 doWork()
@@ -15,7 +17,7 @@ doWork()
  .then(verify);
 ```
 
-### Anti pattern code example – callback style error handling
+### 코드 예시 – 좋지않은 패턴: 콜백 스타일 에러 처리
 
 ```javascript
 getData(someParameter, function(err, result) {
@@ -37,26 +39,26 @@ getData(someParameter, function(err, result) {
 });
 ```
 
-### Blog Quote: "We have a problem with promises"
+### 블로그 인용: "Promise에 문제가 있다"
 
- From the blog pouchdb.com
+ pouchdb.com 블로그에서
 
- > ……And in fact, callbacks do something even more sinister: they deprive us of the stack, which is something we usually take for granted in programming languages. Writing code without a stack is a lot like driving a car without a brake pedal: you don’t realize how badly you need it until you reach for it and it’s not there. The whole point of promises is to give us back the language fundamentals we lost when we went async: return, throw, and the stack. But you have to know how to use promises correctly in order to take advantage of them.
+ > ……그리고 사실 콜백은 훨씬 더 불길한 일을 한다: 콜백은 우리가 프로그래밍 언어에서 당연하게 여기는 스택을 박탈한다. 스택 없이 코드를 작성하는 것은 브레이크 페달 없이 자동차를 운전하는 것과 같다: 스택에 도달했을 때 스택이 없을 경우 비로소 스택이 얼마나 필요한지 깨닫는다. Promise의 요점은 비동기화되었을 때 잃어버린 언어 기본 사항인 return, throw 및 스택을 다시 제공하는 것이다. 그러나 promise의 장점을 활용하려면 promise를 올바르게 사용하는 방법을 알아야 한다.
 
-### Blog Quote: "The promises method is much more compact"
+### 블로그 인용: "Promise 메서드는 훨씬 간결하다"
 
- From the blog gosquared.com
+ gosquared.com 블로그에서
 
- > ………The promises method is much more compact, clearer and quicker to write. If an error or exception occurs within any of the ops it is handled by the single .catch() handler. Having this single place to handle all errors means you don’t need to write error checking for each stage of the work.
+ > ……Promise 메서드는 훨씬 더 간결하고 명확하며 빠르게 작성할 수 있다. 에러 또는 예외가 발생하면 단일 .catch() handler에 의해 처리된다. 모든 에러를 처리할 수 있는 단일 공간이 있다는 것은 각 단계에서 매번 에러를 검사할 필요가 없다는 것을 의미한다.
 
-### Blog Quote: "Promises are native ES6, can be used with generators"
+### 블로그 인용: "Promise는 native ES6이며 generator와 함께 사용할 수 있다"
 
- From the blog StrongLoop
+ StrongLoop 블로그에서
 
- > ….Callbacks have a lousy error-handling story. Promises are better. Marry the built-in error handling in Express with promises and significantly lower the chances of an uncaught exception. Promises are native ES6, can be used with generators, and ES7 proposals like async/await through compilers like Babel
+ > ……콜백에는 형편없는 에러 처리 이야기가 있다. Promise가 더 좋다. Express에 내장된 에러 처리를 promise와 결합하면 처리하지 못한 예외(uncaught exception)의 발생 가능성을 크게 낮춘다. Promise는 native ES6이며 generator와 함께 사용할 수 있고 Babel과 같은 컴파일러를 통해 async/await 등의 ES7 제안을 사용할 수 있다.
 
-### Blog Quote: "All those regular flow control constructs you are used to are completely broken"
+### 블로그 인용: "익숙했던 모든 일반적인 흐름 제어 구조는 완전히 망가졌다"
 
-From the blog Benno’s
+ Benno’s 블로그에서
 
- > ……One of the best things about asynchronous, callback-based programming is that basically all those regular flow control constructs you are used to are completely broken. However, the one I find most broken is the handling of exceptions. Javascript provides a fairly familiar try…catch construct for dealing with exceptions. The problem with exceptions is that they provide a great way of short-cutting errors up a call stack, but end up being completely useless if the error happens on a different stack…
+ > ……비동기식 콜백 기반 프로그래밍을 사용하면 익숙했던 모든 일반적인 흐름 제어 구조가 완전히 망가진다. 이 중 가장 망가진 것은 예외를 처리하는 부분이라고 생각한다. Javascript는 예외를 처리하기 위해 상당히 친숙한 try…catch 구조를 제공한다. 예외는 콜 스택에서 오류를 단축하는 훌륭한 방법을 제공하지만 다른 스택에서 오류가 발생하면 완전히 쓸모 없게 된다는 문제가 있다…
